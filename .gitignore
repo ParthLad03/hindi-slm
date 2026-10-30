@@ -1,0 +1,31 @@
+# Private — never publish
+career/
+
+# Secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Data, checkpoints, caches (these live on the pod volume or the HF Hub)
+data/raw/
+data/processed/
+checkpoints/
+wandb/
+*.safetensors
+*.bin
+*.parquet
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Personal rewrite of the reference code (kept local for now)
+Self-Learn/
