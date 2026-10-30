@@ -27,7 +27,7 @@ Training without a baseline gives you no way to tell whether a change helped. Ph
 | Item | Decision |
 |---|---|
 | Visibility | Public on GitHub from day one |
-| Python env | `uv` + `pyproject.toml`, Python 3.11, versions pinned in `uv.lock` |
+| Python env | conda (`environment.yml`, Python 3.11) + `pyproject.toml`. Exact versions are pinned in `constraints.txt`. |
 | Lint / test | `ruff` + `pytest`. Tests cover anything numeric we could get wrong (BPB, fertility, normalization). |
 | Configs | One YAML file per experiment under `configs/`. No hard-coded hyperparameters. |
 | Experiment tracking | Weights & Biases (free tier). Every eval also writes a JSON result to `reports/results/`. |
@@ -59,7 +59,7 @@ LLM/
 - **Local Mac:** code, tokenizer and fertility work, unit tests. These don't need a GPU.
 - **Pod:** evals and the throughput test. Start from a PyTorch 2.x + CUDA 12.x template.
 - **Network volume:** mounted at `/workspace`, holding `HF_HOME` (model and dataset cache) and the eval slices. Pods stay disposable, and nothing is downloaded twice.
-- **`scripts/pod_setup.sh`:** clone the repo, install `uv`, run `uv sync`, log in to HF and W&B from env vars, then run `nvidia-smi` and a bf16 sanity check. One command from a fresh pod to ready.
+- **`scripts/pod_setup.sh`:** install Miniforge onto the network volume once, clone the repo, create the `hindi-slm` env from `environment.yml`, add `.[gpu,eval]`, log in to HF and W&B from env vars, then run `nvidia-smi` and a bf16 sanity check. One command from a fresh pod to ready. The conda env lives on the volume, so later pods reuse it.
 - **Cost discipline:** stop pods as soon as a job ends. Log GPU-hours per phase in `PLAN.md`.
 
 ## 0.3 Base model: Qwen3.5-0.8B-Base (decided 2026-10-30)
@@ -161,7 +161,7 @@ For Qwen3.5-0.8B (and Qwen3-0.6B as a comparison point), on the 4090:
 
 ## 0.8 Definition of done
 
-- [ ] Repo public, `uv sync` works locally and on a fresh pod, CI runs ruff + pytest
+- [ ] Repo public, `conda env create -f environment.yml` works locally and on a fresh pod, CI runs ruff + pytest
 - [ ] `scripts/pod_setup.sh` goes from a fresh pod to ready in one command
 - [ ] Fertility table for 4 tokenizers × 4 text types
 - [ ] Eval harness v0: BPB on 4 frozen slices + 5 benchmarks, with tests for BPB
@@ -174,7 +174,7 @@ For Qwen3.5-0.8B (and Qwen3-0.6B as a comparison point), on the 4090:
 
 | Day | Work | Commits |
 |---|---|---|
-| 1 | Repo skeleton, README, PLAN, this doc, `pyproject`, CI | 1 |
+| 1 | Repo skeleton, README, PLAN, this doc, conda env, CI | 1–2 |
 | 2 | `pod_setup.sh`, pod sanity run; fertility script + tests | 1–2 |
 | 3 | Fertility results; freeze the eval slices (manifests + hashes) | 2 |
 | 4 | BPB evaluator + tests; first BPB numbers | 1–2 |

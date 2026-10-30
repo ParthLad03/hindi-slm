@@ -1,0 +1,14 @@
+# Exact versions we have tested. pyproject.toml keeps loose lower bounds; this file pins them.
+# Bump deliberately, in its own commit, after the tests pass.
+torch==2.15.0
+transformers==5.22.1
+datasets==5.1.0
+huggingface-hub==2.4.0
+pyyaml==6.0.3
+wandb==0.31.0
+lm-eval==0.4.13
+flash-linear-attention==0.6.0
+kernels==0.18.0
+liger-kernel==0.8.5
+pytest==9.2.0
+ruff==0.17.3

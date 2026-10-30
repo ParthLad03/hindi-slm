@@ -9,6 +9,17 @@ Most Indian users don't type only Devanagari. They mix scripts and languages ("k
 - **Current phase:** [Phase 0: setup & baselines](docs/phases/phase-0-setup-and-baselines.md)
 - **Results and write-ups:** `reports/` (coming as each phase lands)
 
+## Setup
+
+```bash
+conda env create -f environment.yml
+conda activate hindi-slm
+pytest -q
+
+# On a CUDA GPU pod, also install the fast kernels and eval tools:
+pip install -e ".[gpu,eval]" -c constraints.txt
+```
+
 ## Status
 
 🟡 Phase 0 in planning. No models or datasets released yet.
